@@ -3,12 +3,12 @@ dev:
   schema: hotel_booking
 
 acc:
-  catalog: mlops_acc
-  schema: hotel_booking
+  catalog: irc_demos
+  schema: hotel_booking_acc
 
 prd:
-  catalog: mlops_prd
-  schema: hotel_booking
+  catalog: irc_demos
+  schema: hotel_booking_prd
 
 parameters:
   learning_rate: 0.05
