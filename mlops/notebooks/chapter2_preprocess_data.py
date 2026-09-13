@@ -27,6 +27,7 @@ df.columns = df.columns.str.replace(r"[ -]", "_", regex=True)
 df["date_of_reservation"] = df["date_of_reservation"].apply(
     lambda x: "3/1/2018" if x == "2018-2-29" else x
 )
+
 df["date_of_reservation"] = df["date_of_reservation"].apply(
     lambda x: datetime.strptime(x, "%m/%d/%Y")
 )
@@ -43,3 +44,5 @@ spark.sql(
     f"""ALTER TABLE {dst_table}
    SET TBLPROPERTIES (delta.enableChangeDataFeed = true);"""
 )
+
+# COMMAND ----------
