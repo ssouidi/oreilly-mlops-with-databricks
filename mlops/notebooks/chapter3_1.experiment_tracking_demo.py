@@ -10,7 +10,7 @@ mlflow.get_tracking_uri()
 # COMMAND ----------
 experiment = mlflow.set_experiment(experiment_name="/Shared/demo")
 mlflow.set_experiment_tags(
-    {"repository_name": "mvechtomova/oreilly-mlops-with-databricks"}
+    {"repository_name": "ssouidi/oreilly-mlops-with-databricks"}
 )
 print(experiment)
 # COMMAND ----------
@@ -120,3 +120,5 @@ with mlflow.start_run(run_name="top_level_run") as run:
     for i in range(1, 5):
         with mlflow.start_run(run_name=f"subrun_{str(i)}", nested=True) as subrun:
             mlflow.log_metrics({"m1": 5.1 + i, "m2": 2 * i, "m3": 3 + 1.5 * i})
+
+# COMMAND ----------

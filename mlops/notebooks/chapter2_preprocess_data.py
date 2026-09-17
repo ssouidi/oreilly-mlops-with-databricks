@@ -1,8 +1,16 @@
 # Databricks notebook source
 # ruff: noqa
+
+# COMMAND ----------
+# from pathlib import Path
+# import sys
+# sys.path.append(str(Path.cwd().parent / 'src'))
+
+# COMMAND ----------
 from pyspark.sql import SparkSession
 
 from hotel_booking.config import ProjectConfig
+
 
 spark = SparkSession.builder.getOrCreate()
 
@@ -46,3 +54,4 @@ spark.sql(
 )
 
 # COMMAND ----------
+

@@ -1,15 +1,18 @@
 {
-    "_experiment_id": "3154430189072529",
+    "_experiment_id": "1493777580064274",
     "_name": "/Shared/demo",
-    "_artifact_location": "dbfs:/databricks/mlflow-tracking/3154430189072529",
+    "_artifact_location": "dbfs:/databricks/mlflow-tracking/1493777580064274",
     "_lifecycle_stage": "active",
     "_tags": {
-        "mlflow.ownerId": "141803334488778",
+        "mlflow.experimentKind": "genai_development",
+        "mlflow.ownerId": "72074655435340",
         "repository_name": "mvechtomova/oreilly-mlops-with-databricks",
         "mlflow.experiment.sourceName": "/Shared/demo",
-        "mlflow.ownerEmail": "maria@cauchy.io",
+        "mlflow.ownerEmail": "samir.souidi@gmail.com",
         "mlflow.experimentType": "MLFLOW_EXPERIMENT"
     },
-    "_creation_time": 1771793454888,
-    "_last_update_time": 1780301485401
+    "_creation_time": 1789373665110,
+    "_last_update_time": 1789391418714,
+    "_workspace": "default",
+    "_trace_location": null
 }
