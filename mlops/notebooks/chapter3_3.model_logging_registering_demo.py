@@ -22,10 +22,12 @@ data_loader = DataLoader(spark=spark, config=cfg)
 X_train, y_train, X_test, y_test = data_loader.split()
 
 # COMMAND ----------
+
 model = LightGBMModel(config=cfg)
 model.train(X_train=X_train, y_train=y_train)
 
 # COMMAND ----------
+
 mlflow.set_experiment("/Shared/hotel-booking-training")
 tags = Tags(**{"git_sha": "1234567890abcd", "branch": "main"})
 run = mlflow.start_run(
@@ -37,11 +39,13 @@ run_id = run.info.run_id
 mlflow.log_params(cfg.parameters.model_dump())
 
 # COMMAND ----------
+
 signature = infer_signature(
     model_input=X_test, model_output=model.pipeline.predict(X_test)
 )
 
 # COMMAND ----------
+
 training = mlflow.data.from_spark(
     df=data_loader.train_set_spark, sql=data_loader.train_query
 )
@@ -52,6 +56,7 @@ mlflow.log_input(training, context="training")
 mlflow.log_input(testing, context="testing")
 
 # COMMAND ----------
+
 model_info = mlflow.sklearn.log_model(
     sk_model=model.pipeline,
     name="lightgbm-pipeline",
@@ -72,24 +77,35 @@ result = mlflow.models.evaluate(
 mlflow.end_run()
 
 # COMMAND ----------
+
 result.metrics
 
 # COMMAND ----------
+
 logged_model = mlflow.get_logged_model(model_info.model_id)
 model = mlflow.sklearn.load_model(f"models:/{model_info.model_id}")
+
 # COMMAND ----------
+
 logged_model_dict = logged_model.to_dictionary()
 logged_model_dict["metrics"] = [x.__dict__ for x in logged_model_dict["metrics"]]
 with open("../demo_artifacts/logged_model.json", "w") as json_file:
     json.dump(logged_model_dict, json_file, indent=4)
+
 # COMMAND ----------
+
 logged_model.params
+
 # COMMAND ----------
+
 logged_model.metrics
+
 # COMMAND ----------
+
 run = mlflow.get_run(run_id)
 
 # COMMAND ----------
+
 inputs = run.inputs.dataset_inputs
 training_input = next(
     (x for x in inputs if x.tags and x.tags[0].value == "training"),
@@ -97,7 +113,9 @@ training_input = next(
 )
 training_source = mlflow.data.get_source(training_input)
 training_source.load()
+
 # COMMAND ----------
+
 testing_input = next(
     (x for x in inputs if x.tags and x.tags[0].value == "testing"),
     None,
@@ -106,19 +124,23 @@ testing_source = mlflow.data.get_source(testing_input)
 testing_source.load()
 
 # COMMAND ----------
+
 model_name = f"{cfg.catalog}.{cfg.schema}.hotel_booking_basic"
 registered_model = mlflow.register_model(
     model_uri=logged_model.model_uri,
     name=model_name,
     tags=tags.to_dict(),
 )
+
 # COMMAND ----------
+
 # client = MlflowClient()
 
 # job_id = "1234567890abcdef"  # Example job ID; will fail if the job does not exist
 # client.create_registered_model(model_name, deployment_job_id=job_id)
 
 # COMMAND ----------
+
 # latest alias is reserved, so we cannot use it
 client = MlflowClient()
 client.set_registered_model_alias(
@@ -130,22 +152,26 @@ model_version = client.get_model_version_by_alias(alias="latest-model", name=mod
 model = mlflow.sklearn.load_model(f"models:/{model_name}@latest-model")
 
 # COMMAND ----------
+
 # only searching by name is supported
 v = mlflow.search_model_versions(filter_string=f"name='{model_name}'")
 print(v[0].__dict__)
 
 # COMMAND ----------
+
 # not supported
 # v = mlflow.search_model_versions(filter_string="tags.git_sha='1234567890abcd'")
 
 # COMMAND ----------
+
 # Pyfunc model wrapper
 from importlib.metadata import version
 
 __version__ = version("hotel_booking")
-code_paths = [f"../dist/hotel_booking-{__version__}-py3-none-any.whl"]
+code_paths = [f"./hotel_booking-{__version__}-py3-none-any.whl"]
 
 # COMMAND ----------
+
 from hotel_booking.models.pyfunc_model_wrapper import HotelBookingModelWrapper
 
 wrapper = HotelBookingModelWrapper()
@@ -160,7 +186,10 @@ wrapper.log_register_model(
 )
 
 # COMMAND ----------
+
 loaded_pyfunc_model = mlflow.pyfunc.load_model(wrapper.model_info.model_uri)
+
 # COMMAND ----------
+
 unwrapped_model = loaded_pyfunc_model.unwrap_python_model()
 unwrapped_model.predict(context=None, model_input=X_test[0:1])

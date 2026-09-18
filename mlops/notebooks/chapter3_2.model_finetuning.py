@@ -22,6 +22,7 @@ X_train, y_train, X_valid, y_valid = data_loader.split(
 )
 
 # COMMAND ----------
+
 from ray import tune
 
 param_space = {
@@ -87,6 +88,7 @@ def train_with_nested_mlflow(
 
 
 # COMMAND ----------
+
 from databricks.sdk import WorkspaceClient
 
 w = WorkspaceClient()
@@ -94,6 +96,7 @@ os.environ["DATABRICKS_HOST"] = w.config.host
 os.environ["DATABRICKS_TOKEN"] = w.tokens.create(lifetime_seconds=1200).token_value
 
 # COMMAND ----------
+
 # for distributed, use this:
 # from ray.util.spark import setup_ray_cluster
 
@@ -102,7 +105,9 @@ os.environ["DATABRICKS_TOKEN"] = w.tokens.create(lifetime_seconds=1200).token_va
 #   max_worker_nodes=8,
 # )
 # os.environ['RAY_ADDRESS'] = ray_conf[0]
+
 # COMMAND ----------
+
 from ray.tune.search.optuna import OptunaSearch
 
 mlflow.set_experiment("/Shared/hotel-booking-finetuning")
@@ -137,7 +142,6 @@ with mlflow.start_run(
     results = tuner.fit()
 
 # COMMAND ----------
+
 best_result = results.get_best_result(metric="rmse", mode="min")
 best_result.config
-
-# COMMAND ----------

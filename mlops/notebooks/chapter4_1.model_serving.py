@@ -22,6 +22,7 @@ model_version = client.get_model_version_by_alias(
 )
 
 # COMMAND ----------
+
 from databricks.sdk.service.serving import ServedEntityInput
 
 served_entities = [
@@ -34,6 +35,7 @@ served_entities = [
 ]
 
 # COMMAND ----------
+
 from databricks.sdk.service.serving import (
     AiGatewayConfig,
     AiGatewayInferenceTableConfig,
@@ -51,6 +53,7 @@ ai_gateway_cfg = AiGatewayConfig(
 )
 
 # COMMAND ----------
+
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.serving import (
     EndpointCoreConfigInput,
@@ -86,6 +89,7 @@ else:
     w.serving_endpoints.update_config(name=endpoint_name, served_entities=served_entities)
 
 # COMMAND ----------
+
 # Call the endpoint
 host = w.config.host
 token = w.tokens.create(lifetime_seconds=1200).token_value
@@ -120,6 +124,7 @@ response = requests.post(
 response.text
 
 # COMMAND ----------
+
 # another way to call the endpoint
 
 payload = {
@@ -149,6 +154,7 @@ response = requests.post(
 response.text
 
 # COMMAND ----------
+
 # For the second payload format (dataframe_split)
 import pandas as pd
 
@@ -159,6 +165,7 @@ model_uri = f"models:/{catalog}.{schema}.{model_name}@latest-model"
 mlflow.models.predict(model_uri, input_example)
 
 # COMMAND ----------
+
 # Convert the input example to serving payload format
 from mlflow.models import convert_input_example_to_serving_input, validate_serving_input
 

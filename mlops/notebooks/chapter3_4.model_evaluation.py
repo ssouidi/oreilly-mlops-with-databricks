@@ -22,6 +22,7 @@ data_processor.generate_synthetic_df(n=1000, max_date=None)
 data_processor.save_to_catalog()
 
 # COMMAND ----------
+
 from hotel_booking.models.lightgbm_model import LightGBMModel
 
 data_loader = DataLoader(spark=spark, config=cfg)
@@ -32,6 +33,7 @@ model = LightGBMModel(config=cfg)
 model.train(X_train=X_train, y_train=y_train)
 
 # COMMAND ----------
+
 tags = Tags(**{"git_sha": "1234567890abcd", "branch": "main"})
 
 model_info = model.log_model(
@@ -44,9 +46,13 @@ model_info = model.log_model(
     test_set_spark=data_loader.test_set_spark,
     test_query=data_loader.test_query,
 )
+
 # COMMAND ----------
+
 metrics_new = model.metrics
+
 # COMMAND ----------
+
 import mlflow
 
 sklearn_model_name = f"{cfg.catalog}.{cfg.schema}.hotel_booking_basic"
@@ -64,5 +70,14 @@ result = mlflow.models.evaluate(
 metrics_old = result.metrics
 
 # COMMAND ----------
+
+print (metrics_new)
+
+# COMMAND ----------
+
+print (metrics_old)
+
+# COMMAND ----------
+
 if metrics_new["root_mean_squared_error"] < metrics_old["root_mean_squared_error"]:
     model.register_model(model_name=sklearn_model_name, tags=tags)

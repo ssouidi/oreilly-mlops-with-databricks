@@ -1,12 +1,21 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "4"
+# dependencies = [
+#   "/Workspace/Users/samir.souidi@rescue.org/oreilly-mlops-with-databricks/mlops/notebooks/hotel_booking-0.1.0-py3-none-any.whl",
+# ]
+# ///
 # ruff: noqa
 
 # COMMAND ----------
+
 # from pathlib import Path
 # import sys
 # sys.path.append(str(Path.cwd().parent / 'src'))
 
 # COMMAND ----------
+
 from pyspark.sql import SparkSession
 
 from hotel_booking.config import ProjectConfig
@@ -19,12 +28,14 @@ catalog = cfg.catalog
 schema = cfg.schema
 
 # COMMAND ----------
+
 # Create catalog and schema if they do not exist
 # spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog}")
 # spark.sql(f"CREATE SCHEMA IF NOT EXISTS {catalog}.{schema}")
 
 
 # COMMAND ----------
+
 # Load and process the data
 from datetime import datetime
 
